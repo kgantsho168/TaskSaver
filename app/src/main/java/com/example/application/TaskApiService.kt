@@ -4,20 +4,33 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
+
+data class UserAuthDto(
+    val username: String,
+    val passwordHash: String
+)
+
+data class AuthResponse(
+    val success: Boolean,
+    val message: String,
+    val token: String? = null
+)
 
 interface TaskApiService {
 
-    @GET("api/tasks")
-    suspend fun getRemoteTasks(): Response<List<TaskEntity>>
+    @POST("api/auth/register")
+    suspend fun registerUser(@Body user: UserAuthDto): Response<AuthResponse>
 
-    @POST("api/tasks")
-    suspend fun syncTask(@Body task: TaskEntity): Response<TaskEntity>
+    @POST("api/auth/login")
+    suspend fun loginUser(@Body user: UserAuthDto): Response<AuthResponse>
+
+    @POST("api/tasks/sync")
+    suspend fun syncTask(@Body task: TaskEntity): Response<Unit>
 
     companion object {
-        // Replace with your Node.js backend URL or local IP (10.0.2.2 for emulator)
-        private const val BASE_URL = "https://your-api-endpoint.com/"
+        // TODO: Replace with your actual deployed Render/Railway backend URL
+        private const val BASE_URL = "https://your-backend-service.onrender.com/"
 
         fun create(): TaskApiService {
             return Retrofit.Builder()
