@@ -2,21 +2,21 @@ package com.example.application
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.application.R
-import com.example.application.databinding.ActivityMainBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.application.databinding.ActivityMainBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -34,26 +34,12 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerView()
         loadTasks()
+        observeNetworkStatus()
+        setupBackgroundSync()
 
         binding.fabAddTask.setOnClickListener {
             showAddTaskDialog()
         }
-    }
-
-    private fun setupBackgroundSync() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "TaskSyncWorker",
-            ExistingPeriodicWorkPolicy.KEEP,
-            syncRequest
-        )
     }
 
     private fun setupRecyclerView() {
@@ -76,6 +62,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeNetworkStatus() {
+        val networkObserver = NetworkObserver(this)
+        lifecycleScope.launch {
+            networkObserver.isOnline.collect { isOnline ->
+                if (isOnline) {
+                    binding.tvNetworkStatus.visibility = View.GONE
+                } else {
+                    binding.tvNetworkStatus.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun setupBackgroundSync() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "TaskSyncWorker",
+            ExistingPeriodicWorkPolicy.KEEP,
+            syncRequest
+        )
+    }
+
     private fun showAddTaskDialog() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_task, null)
         val etTitle = dialogView.findViewById<EditText>(R.id.etTitle)
@@ -86,9 +101,9 @@ class MainActivity : AppCompatActivity() {
             .setTitle("New Task")
             .setView(dialogView)
             .setPositiveButton("Add") { _, _ ->
-                val title = etTitle.text.toString()
-                val description = etDescription.text.toString()
-                val category = etCategory.text.toString().ifEmpty { "General" }
+                val title = etTitle.text.toString().trim()
+                val description = etDescription.text.toString().trim()
+                val category = etCategory.text.toString().trim().ifEmpty { "General" }
 
                 if (title.isNotEmpty()) {
                     val newTask = TaskEntity(
