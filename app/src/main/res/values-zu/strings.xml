@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TaskSaver</string>
+    <string name="login_title">Siyakwamukela Futhi</string>
+    <string name="btn_login">Ngena</string>
+    <string name="btn_register">Bhalisa</string>
+    <string name="add_task">Dala Umsebenzi Omusha</string>
+    <string name="tasks_done">Imisebenzi Eqediwe</string>
+</resources>

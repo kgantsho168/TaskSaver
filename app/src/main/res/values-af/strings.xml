@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TaskSaver</string>
+    <string name="login_title">Welkom Terug</string>
+    <string name="btn_login">Teken in</string>
+    <string name="btn_register">Registreer</string>
+    <string name="add_task">Skep Nuwe Taak</string>
+    <string name="tasks_done">Take Voltooi</string>
+</resources>

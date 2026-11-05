@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Application</string>
+    <string name="app_name">TaskSaver</string>
+    <string name="login_title">Welcome Back</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
+    <string name="add_task">Create New Task</string>
+    <string name="tasks_done">Tasks Done</string>
 </resources>
