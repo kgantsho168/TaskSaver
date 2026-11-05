@@ -3,6 +3,27 @@
     <string name="login_title">Welcome Back</string>
     <string name="btn_login">Login</string>
     <string name="btn_register">Register</string>
-    <string name="add_task">Create New Task</string>
+    <string name="add_task">Add New Task</string>
     <string name="tasks_done">Tasks Done</string>
+
+    <string name="offline_mode_msg">Offline Mode - Changes queued locally</string>
+    <string name="daily_habit_streak">Daily Habit Streak</string>
+    <string name="tab_all">All</string>
+    <string name="tab_high">High</string>
+    <string name="tab_medium">Medium</string>
+    <string name="tab_low">Low</string>
+
+    <string name="dialog_create_task_title">Create New Task</string>
+    <string name="hint_task_title">Task Title</string>
+    <string name="hint_task_description">Description</string>
+    <string name="hint_task_category">Category (e.g., Work)</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="msg_title_empty">Title cannot be empty</string>
+    <string name="msg_task_added">Task Added</string>
+
+    <string name="label_priority">Priority</string>
+    <string name="priority_high">High</string>
+    <string name="priority_medium">Medium</string>
+    <string name="priority_low">Low</string>
 </resources>

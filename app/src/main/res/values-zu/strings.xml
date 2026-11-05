@@ -6,4 +6,25 @@
     <string name="btn_register">Bhalisa</string>
     <string name="add_task">Dala Umsebenzi Omusha</string>
     <string name="tasks_done">Imisebenzi Eqediwe</string>
+
+    <string name="offline_mode_msg">Imodi Engaxhunyiwe - Izinguquko zilondolozwe endaweni</string>
+    <string name="daily_habit_streak">Uchungechunge Lwemikhuba Yansuku zonke</string>
+    <string name="tab_all">Konke</string>
+    <string name="tab_high">Phezulu</string>
+    <string name="tab_medium">Phakathi</string>
+    <string name="tab_low">Phansi</string>
+
+    <string name="dialog_create_task_title">Dala Umsebenzi Omusha</string>
+    <string name="hint_task_title">Isihloko Somsebenzi</string>
+    <string name="hint_task_description">Incazelo</string>
+    <string name="hint_task_category">Isigaba (isb., Umsebenzi)</string>
+    <string name="btn_save">Londoloza</string>
+    <string name="btn_cancel">Khansela</string>
+    <string name="msg_title_empty">Isihloko asikwazi ukuba yize</string>
+    <string name="msg_task_added">Umsebenzi Engeziwe</string>
+
+    <string name="label_priority">Okubalulekile</string>
+    <string name="priority_high">Phezulu</string>
+    <string name="priority_medium">Phakathi</string>
+    <string name="priority_low">Phansi</string>
 </resources>

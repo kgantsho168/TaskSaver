@@ -1,15 +1,22 @@
 package com.example.application
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.application.databinding.ActivityMainBinding
@@ -17,13 +24,17 @@ import com.example.application.databinding.DialogAddTaskBinding
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var database: AppDatabase
     private lateinit var taskAdapter: TaskAdapter
+    private lateinit var notificationHelper: NotificationHelper
     private var allTasksList: List<TaskEntity> = emptyList()
+
+    private val NOTIFICATION_PERMISSION_CODE = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +42,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         database = AppDatabase.getDatabase(this)
+        notificationHelper = NotificationHelper(this)
+
+        // Request runtime notification permission for API 33+
+        requestNotificationPermission()
 
         // Set logged-in username in top app bar
         val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
@@ -48,10 +63,46 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Ensure the saved locale is applied instantly when returning from SettingsActivity
+        val prefs = getSharedPreferences("SettingsPrefs", Context.MODE_PRIVATE)
+        val langCode = prefs.getString("My_Lang", "en") ?: "en"
+        val locale = Locale(langCode)
+        Locale.setDefault(locale)
+        val config = Configuration(resources.configuration)
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    NOTIFICATION_PERMISSION_CODE
+                )
+            }
+        }
+    }
+
     private fun setupRecyclerView() {
         taskAdapter = TaskAdapter(emptyList()) { updatedTask ->
             lifecycleScope.launch {
                 database.taskDao().updateTask(updatedTask)
+
+                // Trigger push notification when a task is marked complete
+                if (updatedTask.isCompleted) {
+                    notificationHelper.sendNotification(
+                        title = "Task Completed! 🎉",
+                        message = "Great job finishing: '${updatedTask.title}'"
+                    )
+                }
             }
         }
         binding.rvTasks.apply {
@@ -64,9 +115,9 @@ class MainActivity : AppCompatActivity() {
         val dialogBinding = DialogAddTaskBinding.inflate(LayoutInflater.from(this))
 
         AlertDialog.Builder(this)
-            .setTitle("Create New Task")
+            .setTitle(getString(R.string.dialog_create_task_title))
             .setView(dialogBinding.root)
-            .setPositiveButton("Save") { _, _ ->
+            .setPositiveButton(getString(R.string.btn_save)) { _, _ ->
                 val title = dialogBinding.etTitle.text.toString().trim()
                 val description = dialogBinding.etDescription.text.toString().trim()
                 val category = dialogBinding.etCategory.text.toString().trim().ifEmpty { "General" }
@@ -87,13 +138,13 @@ class MainActivity : AppCompatActivity() {
                             isSynced = false
                         )
                         database.taskDao().insertTask(newTask)
-                        Toast.makeText(this@MainActivity, "Task Added", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, getString(R.string.msg_task_added), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this, "Title cannot be empty", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.msg_title_empty), Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.btn_cancel), null)
             .show()
     }
 
@@ -101,7 +152,9 @@ class MainActivity : AppCompatActivity() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_settings -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    startActivity(intent)
+                    finish() // Finishes MainActivity so it cleanly recreates itself with the new language on return
                     true
                 }
                 R.id.action_logout -> {
@@ -190,7 +243,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onLost(network: Network) {
                     runOnUiThread {
                         binding.tvSyncStatus.visibility = View.VISIBLE
-                        binding.tvSyncStatus.text = "Offline Mode - Changes queued locally"
+                        binding.tvSyncStatus.text = getString(R.string.offline_mode_msg)
                     }
                 }
             }

@@ -39,29 +39,35 @@
         android:layout_marginBottom="8dp"/>
 
     <RadioGroup
-        android:id="@+id/rgLanguage"
+        android:id="@+id/radioGroupLanguage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp">
+        android:layout_height="wrap_content">
 
         <RadioButton
-            android:id="@+id/rbEnglish"
+            android:id="@+id/radioEnglish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="English" />
 
         <RadioButton
-            android:id="@+id/rbAfrikaans"
+            android:id="@+id/radioAfrikaans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Afrikaans" />
+
+        <RadioButton
+            android:id="@+id/radioZulu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="isiZulu" />
+
     </RadioGroup>
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout"
+        android:text="Save"
         android:backgroundTint="#D32F2F" />
 
 </LinearLayout>

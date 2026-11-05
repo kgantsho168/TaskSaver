@@ -9,50 +9,57 @@
         android:id="@+id/etTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Task Title" />
+        android:hint="@string/hint_task_title"
+        android:inputType="text"
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:hint="Description" />
+        android:hint="@string/hint_task_description"
+        android:inputType="textMultiLine"
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/etCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/hint_task_category"
+        android:inputType="text"
+        android:minHeight="48dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:hint="Category (e.g. Work, Study)" />
+        android:text="@string/label_priority"
+        android:textStyle="bold" />
 
     <RadioGroup
         android:id="@+id/rgPriority"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/rbHigh"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="High" />
+            android:text="@string/priority_high" />
 
         <RadioButton
             android:id="@+id/rbMedium"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:checked="true"
-            android:text="Medium" />
+            android:text="@string/priority_medium" />
 
         <RadioButton
             android:id="@+id/rbLow"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Low" />
+            android:text="@string/priority_low" />
     </RadioGroup>
 
 </LinearLayout>

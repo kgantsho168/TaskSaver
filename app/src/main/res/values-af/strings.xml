@@ -5,5 +5,26 @@
     <string name="btn_login">Teken in</string>
     <string name="btn_register">Registreer</string>
     <string name="add_task">Skep Nuwe Taak</string>
-    <string name="tasks_done">Take Voltooi</string>
+    <string name="tasks_done">Taake Voltooi</string>
+
+    <string name="offline_mode_msg">Vanlyn Modus - Veranderinge plaaslik gestoor</string>
+    <string name="daily_habit_streak">Daaglikse Gewoonte Reeks</string>
+    <string name="tab_all">Alles</string>
+    <string name="tab_high">Hoog</string>
+    <string name="tab_medium">Medium</string>
+    <string name="tab_low">Laag</string>
+
+    <string name="dialog_create_task_title">Skep Nuwe Taak</string>
+    <string name="hint_task_title">Taaktitel</string>
+    <string name="hint_task_description">Beskrywing</string>
+    <string name="hint_task_category">Kategorie (bv. Werk)</string>
+    <string name="btn_save">Stoor</string>
+    <string name="btn_cancel">Kanselleer</string>
+    <string name="msg_title_empty">Titel kan nie leeg wees nie</string>
+    <string name="msg_task_added">Taak Bygevoeg</string>
+
+    <string name="label_priority">Prioriteit</string>
+    <string name="priority_high">Hoog</string>
+    <string name="priority_medium">Medium</string>
+    <string name="priority_low">Laag</string>
 </resources>
